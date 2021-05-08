@@ -1,0 +1,27 @@
+setOnClickListener
+	createNewGame()
+createNewGame	
+	dlg = CreateGameDialog()
+	dlg.show(...)
+setOnClickListener
+view.java gjør noe
+CreateGameDialog::onCreateDialog.builder.create()
+CreateGameDialog::onCreateDialog returnerer activity
+Skriv inn spillernavn i tekstboks
+onDialogCreateGame(player)
+	GameService.createGame()
+GameService.createGame()
+onCreateDialog
+	playerName = binding....
+	
+	
+onCreateDialog -> builder.apply{}
+Prøv å deaktivere denne koden:
+Log.e("Take me down", "to the Paradise City")
+                        var myCallback: GameServiceCallback = { x, y -> Log.i("GameServiceCallback","${x} returned ${y}") }
+                        GameService.createGame("PlayerId",
+                            listOf(listOf(0,0,0),listOf(0,0,0),listOf(0,0,0)),
+                            myCallback) //
+
+Prøv å starte GameActivity. Legg inn noe enkel tekst til å begynne med. Deretter prøvå skriv ut spillers navn, gameid eller noe liknende, 
+enten fra funskjonskall eller fra variabel i MainActivity. Må kanskje bruke intent for å legge inn verdier.

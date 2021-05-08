@@ -11,6 +11,8 @@ import no.uia.ikt205.thgame.dialogs.CreateGameDialog
 import no.uia.ikt205.thgame.dialogs.GameDialogListener
 import no.uia.ikt205.thgame.dialogs.GameServiceCallback
 
+const val EXTRA_MESSAGE = "no.uia.ikt205.knotsandcrosses.MESSAGE"
+
 class MainActivity : AppCompatActivity() , GameDialogListener {
 
     val TAG:String = "MainActivity"
@@ -25,7 +27,7 @@ class MainActivity : AppCompatActivity() , GameDialogListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        try {
+        /*try {
             GameService.createGame("Helge21", listOf(listOf(1,2,3),listOf(1,2,3),listOf(1,2,3))){ state: Game?, error: Int? ->
 
                 if(state != null) {
@@ -45,12 +47,14 @@ class MainActivity : AppCompatActivity() , GameDialogListener {
             }
         }catch(e: Exception) {
             Log.e("MainActivity", e.toString())
-        }
+        }*/
 
 
 
         binding.startButton.setOnClickListener {
             createNewGame()
+
+            print(currentGame.gameId)
         }
 
         binding.joinButton.setOnClickListener {
@@ -70,7 +74,8 @@ class MainActivity : AppCompatActivity() , GameDialogListener {
     private fun createNewGame(){
         val dlg = CreateGameDialog()
         dlg.show(supportFragmentManager,"CreateGameDialogFragment")
-    }
+
+        }
 
     private fun joinGame(){
         GameService.joinGame("Bowser", currentGame.gameId) { state: Game?, error: Int? ->
@@ -90,6 +95,27 @@ class MainActivity : AppCompatActivity() , GameDialogListener {
     }
 
     override fun onDialogCreateGame(player: String) {
+        try {
+            GameService.createGame(player, listOf(listOf(1,2,3),listOf(1,2,3),listOf(1,2,3))){ state: Game?, error: Int? ->
+
+                if(state != null) {
+                    print("got something")
+                    //currentGame = Game(state.players, state.gameId, state.state)
+                    currentGame.setGameId(state.gameId)
+                    currentGame.setPlayers(state.players)
+                    currentGame.setState(state.state)
+                    //currentGame = Game(state.players, state.gameId, state.state)
+                    //gameArray[0] = state.gameId
+                    // val thisGamesId = state?.gameId
+                } else {
+                    //gameArray.set(0, "Fysj")
+                    print("got nothing")
+                }
+                Log.i("Main", "thisGamesId is something or nothing")
+            }
+        }catch(e: Exception) {
+            Log.e("MainActivity", e.toString())
+        }
         Log.d(TAG,player)
     }
 

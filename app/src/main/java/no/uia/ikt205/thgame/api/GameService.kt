@@ -67,7 +67,7 @@ object GameService {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
                 headers["Content-Type"] = "application/json"
-                headers["Game-Service-Key"] = "SjmCbqP65f"
+                headers["Game-Service-Key"] = "OzvIa676yG"
                 return headers
             }
         }

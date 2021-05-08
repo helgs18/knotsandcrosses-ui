@@ -35,6 +35,7 @@ class CreateGameDialog() : DialogFragment() {
                     if(binding.username.text.toString() != ""){
                         listener.onDialogCreateGame(binding.username.text.toString())
                         var playername = binding.username.text.toString()
+                        // ToDo: prøv å kommenter ut denne koden (inkludert GameService.createGame(...) delen)
                         Log.e("Take me down", "to the Paradise City")
                         var myCallback: GameServiceCallback = { x, y -> Log.i("GameServiceCallback","${x} returned ${y}") }
                         GameService.createGame("PlayerId",
