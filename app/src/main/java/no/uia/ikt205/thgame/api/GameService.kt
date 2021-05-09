@@ -44,12 +44,12 @@ object GameService {
 
     fun createGame(playerId: String, state: GameState, callback: GameServiceCallback) {
         Log.i("GameService", "starting a game as ${playerId}")
-        val customState = listOf(listOf(0, 0, 0), listOf(0, 0, 0), listOf(0, 0, 0))
+        //val customState = listOf(listOf(0, 0, 0), listOf(0, 0, 0), listOf(0, 0, 0))
         val url = APIEndpoints.CREATE_GAME.url
 
         val requestData = JSONObject()
         requestData.put("player", playerId)
-        requestData.put("state", customState)
+        requestData.put("state", state)
 
         var requestString = requestData.toString().replace("\"", "")
         var requestObject = JSONObject(requestString)
@@ -73,11 +73,12 @@ object GameService {
         }
 
         var test = requestQueue.add(request)
-        Log.e("GameService", "New game started for ${playerId}")
 
     }
 
     fun joinGame(player2: String, gameId: String, callback: GameServiceCallback) {
+        // ToDo: finn ut hvorfor appen krasjer
+        // ToDo: videresend til activity
         Log.i("GameService", "joining game ${gameId} as ${player2}")
         var url = APIEndpoints.JOIN_GAME.url
 

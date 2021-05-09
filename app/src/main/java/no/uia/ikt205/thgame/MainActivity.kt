@@ -5,15 +5,15 @@ import android.os.Bundle
 import android.util.Log
 import no.uia.ikt205.knotsandcrosses.api.GameService
 import no.uia.ikt205.knotsandcrosses.api.data.Game
-import no.uia.ikt205.knotsandcrosses.api.data.GameState
 import no.uia.ikt205.knotsandcrosses.databinding.ActivityMainBinding
 import no.uia.ikt205.thgame.dialogs.CreateGameDialog
 import no.uia.ikt205.thgame.dialogs.GameDialogListener
-import no.uia.ikt205.thgame.dialogs.GameServiceCallback
+import no.uia.ikt205.thgame.dialogs.JoinGameDialog
+import no.uia.ikt205.thgame.dialogs.JoinGameDialogListener
 
 const val EXTRA_MESSAGE = "no.uia.ikt205.knotsandcrosses.MESSAGE"
 
-class MainActivity : AppCompatActivity() , GameDialogListener {
+class MainActivity : AppCompatActivity() , GameDialogListener, JoinGameDialogListener {
 
     val TAG:String = "MainActivity"
 
@@ -53,8 +53,12 @@ class MainActivity : AppCompatActivity() , GameDialogListener {
 
         binding.startButton.setOnClickListener {
             createNewGame()
-
-            print(currentGame.gameId)
+            // nå har CreateGameDialog klassen og startButton gjort sin jobb
+            // da er videre eksevering avhengig av CreateGameDialog koden
+            /* val intent = Intent(this, DisplayMessageActivity::class.java).apply{
+            putExtra(EXTRA_MESSAGE, message)
+        }
+        startActivity(intent)*/
         }
 
         binding.joinButton.setOnClickListener {
@@ -74,12 +78,17 @@ class MainActivity : AppCompatActivity() , GameDialogListener {
     private fun createNewGame(){
         val dlg = CreateGameDialog()
         dlg.show(supportFragmentManager,"CreateGameDialogFragment")
-
+        /* val intent = Intent(this, DisplayMessageActivity::class.java).apply{
+            putExtra(EXTRA_MESSAGE, message)
+        }
+        startActivity(intent)*/
         }
 
     private fun joinGame(){
-        GameService.joinGame("Bowser", currentGame.gameId) { state: Game?, error: Int? ->
-        }
+        val dlg = JoinGameDialog()
+        dlg.show(supportFragmentManager, "JoinGameDialogFragment")
+        /*GameService.joinGame("Bowser", currentGame.gameId) { state: Game?, error: Int? ->
+        }*/
     }
 
     private fun updateGame(){
@@ -111,16 +120,39 @@ class MainActivity : AppCompatActivity() , GameDialogListener {
                     //gameArray.set(0, "Fysj")
                     print("got nothing")
                 }
-                Log.i("Main", "thisGamesId is something or nothing")
             }
         }catch(e: Exception) {
             Log.e("MainActivity", e.toString())
         }
-        Log.d(TAG,player)
-    }
+        print("Dette skjer når?") // Etter GameService.create(), men før this currentGame.setPlayers(state.players)
+    } // ends fun onDialogCreateGame()
 
-    override fun onDialogJoinGame(player: String, gameId: String) {
+    override fun onDialogJoinGame(player:String, gameId: String) {
+        try {
+            GameService.joinGame(player, gameId){ state: Game?, error: Int? ->
+
+                if(state != null) {
+                    print("got something")
+                    //currentGame = Game(state.players, state.gameId, state.state)
+                    currentGame.setGameId(gameId)
+                    currentGame.setPlayers(state.players)
+                    currentGame.setState(state.state)
+                    //currentGame = Game(state.players, state.gameId, state.state)
+                    //gameArray[0] = state.gameId
+                    // val thisGamesId = state?.gameId
+                } else {
+                    //gameArray.set(0, "Fysj")
+                    print("got nothing")
+                }
+            }
+        }catch(e: Exception) {
+            Log.e("MainActivity", e.toString())
+        }
+        print("Dette skjer når?") // Etter GameService.create(), men før this currentGame.setPlayers(state.players)
+    } // ends fun onDialogCreateGame()
+
+    /*override fun onDialogJoinGame(player: String, gameId: String) {
         Log.d(TAG, "$player $gameId")
-    }
+    }*/
 
 }
