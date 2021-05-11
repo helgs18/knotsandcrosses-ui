@@ -76,7 +76,11 @@ object GameService {
 
     }
 
+    // fun pollGame(gameId: String, callback: GameServiceCallback)
+    // fun updateGame(players: List<String>, gameId: String, gameState: GameState, callback: GameServiceCallback)
+    // fun createGame(playerId: String, state: GameState, callback: GameServiceCallback)
     fun joinGame(player2: String, gameId: String, callback: GameServiceCallback) {
+        var retval = true
         // ToDo: finn ut hvorfor appen krasjer
         // ToDo: videresend til activity
         Log.i("GameService", "joining game ${gameId} as ${player2}")
@@ -97,6 +101,7 @@ object GameService {
                 }, {
             // Error creating new game.
             callback(null, it.networkResponse.statusCode)
+            //retval = false
         }) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
@@ -106,7 +111,7 @@ object GameService {
             }
         }
         requestQueue.add(request)
-        Log.i("GameService", "${player2} has joined the game ${gameId}")
+        //return retval
     }
 
     fun updateGame(players: List<String>, gameId: String, gameState: GameState, callback: GameServiceCallback) {

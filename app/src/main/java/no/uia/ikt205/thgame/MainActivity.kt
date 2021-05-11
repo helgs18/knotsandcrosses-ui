@@ -62,7 +62,12 @@ class MainActivity : AppCompatActivity() , GameDialogListener, JoinGameDialogLis
         }
 
         binding.joinButton.setOnClickListener {
-            joinGame()
+            val joinedGame: Boolean = joinGame()
+            if(joinedGame == false){
+                Log.e("MainActivity", "joinGame() returned false")
+            } else {
+                Log.i("MainActivity", "joinGame() returned true")
+            }
         }
 
         binding.updateButton.setOnClickListener {
@@ -84,11 +89,13 @@ class MainActivity : AppCompatActivity() , GameDialogListener, JoinGameDialogLis
         startActivity(intent)*/
         }
 
-    private fun joinGame(){
+    private fun joinGame(): Boolean{
         val dlg = JoinGameDialog()
         dlg.show(supportFragmentManager, "JoinGameDialogFragment")
         /*GameService.joinGame("Bowser", currentGame.gameId) { state: Game?, error: Int? ->
         }*/
+        println("crasher det før eller etter dette?")
+        return true
     }
 
     private fun updateGame(){
@@ -132,11 +139,11 @@ class MainActivity : AppCompatActivity() , GameDialogListener, JoinGameDialogLis
             GameService.joinGame(player, gameId){ state: Game?, error: Int? ->
 
                 if(state != null) {
-                    print("got something")
                     //currentGame = Game(state.players, state.gameId, state.state)
                     currentGame.setGameId(gameId)
                     currentGame.setPlayers(state.players)
                     currentGame.setState(state.state)
+                    print("got something")
                     //currentGame = Game(state.players, state.gameId, state.state)
                     //gameArray[0] = state.gameId
                     // val thisGamesId = state?.gameId
