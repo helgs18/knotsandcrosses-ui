@@ -32,7 +32,7 @@ data class Game(var players:MutableList<String>, var gameId:String, var state:Ga
     @JvmName("setPlayers1")
     fun setPlayers(players: MutableList<String>){
         players.forEach {
-            players.add(it)
+            this.players.add(it)
         }
     }
     @JvmName("addPlayer")
