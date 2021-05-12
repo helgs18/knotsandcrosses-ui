@@ -1,5 +1,6 @@
 package no.uia.ikt205.knotsandcrosses
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -18,8 +19,7 @@ class MainActivity : AppCompatActivity() , GameDialogListener, JoinGameDialogLis
     val TAG:String = "MainActivity"
 
     //lateinit var currentGame: Game
-    var currentGame: Game = Game(mutableListOf<String>(), "", listOf())
-    lateinit var gameArray: Array<String>
+    var currentGame: Game = Game(mutableListOf<String>(), "000", listOf())
     lateinit var binding:ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,47 +27,13 @@ class MainActivity : AppCompatActivity() , GameDialogListener, JoinGameDialogLis
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /*try {
-            GameService.createGame("Helge21", listOf(listOf(1,2,3),listOf(1,2,3),listOf(1,2,3))){ state: Game?, error: Int? ->
-
-                if(state != null) {
-                    print("got something")
-                    //currentGame = Game(state.players, state.gameId, state.state)
-                    currentGame.setGameId(state.gameId)
-                    currentGame.setPlayers(state.players)
-                    currentGame.setState(state.state)
-                    //currentGame = Game(state.players, state.gameId, state.state)
-                    //gameArray[0] = state.gameId
-                    // val thisGamesId = state?.gameId
-                } else {
-                    //gameArray.set(0, "Fysj")
-                    print("got nothing")
-                }
-                Log.i("Main", "thisGamesId is something or nothing")
-            }
-        }catch(e: Exception) {
-            Log.e("MainActivity", e.toString())
-        }*/
-
-
 
         binding.startButton.setOnClickListener {
             createNewGame()
-            // nå har CreateGameDialog klassen og startButton gjort sin jobb
-            // da er videre eksevering avhengig av CreateGameDialog koden
-            /* val intent = Intent(this, DisplayMessageActivity::class.java).apply{
-            putExtra(EXTRA_MESSAGE, message)
-        }
-        startActivity(intent)*/
         }
 
         binding.joinButton.setOnClickListener {
-            val joinedGame: Boolean = joinGame()
-            if(joinedGame == false){
-                Log.e("MainActivity", "joinGame() returned false")
-            } else {
-                Log.i("MainActivity", "joinGame() returned true")
-            }
+            joinGame()
         }
 
         binding.updateButton.setOnClickListener {
@@ -83,19 +49,12 @@ class MainActivity : AppCompatActivity() , GameDialogListener, JoinGameDialogLis
     private fun createNewGame(){
         val dlg = CreateGameDialog()
         dlg.show(supportFragmentManager,"CreateGameDialogFragment")
-        /* val intent = Intent(this, DisplayMessageActivity::class.java).apply{
-            putExtra(EXTRA_MESSAGE, message)
-        }
-        startActivity(intent)*/
+
         }
 
-    private fun joinGame(): Boolean{
+    private fun joinGame(){
         val dlg = JoinGameDialog()
         dlg.show(supportFragmentManager, "JoinGameDialogFragment")
-        /*GameService.joinGame("Bowser", currentGame.gameId) { state: Game?, error: Int? ->
-        }*/
-        println("crasher det før eller etter dette?")
-        return true
     }
 
     private fun updateGame(){
@@ -118,21 +77,21 @@ class MainActivity : AppCompatActivity() , GameDialogListener, JoinGameDialogLis
                     print("got something")
                     //currentGame = Game(state.players, state.gameId, state.state)
                     currentGame.setGameId(state.gameId)
+                    CreateGameDialog.instance.setCreateGameId(state.gameId)
                     currentGame.setPlayers(state.players)
                     currentGame.setState(state.state)
-                    //currentGame = Game(state.players, state.gameId, state.state)
-                    //gameArray[0] = state.gameId
-                    // val thisGamesId = state?.gameId
                 } else {
-                    //gameArray.set(0, "Fysj")
                     print("got nothing")
                 }
             }
         }catch(e: Exception) {
             Log.e("MainActivity", e.toString())
         }
-        print("Dette skjer når?") // Etter GameService.create(), men før this currentGame.setPlayers(state.players)
-    } // ends fun onDialogCreateGame()
+        /*var intent = Intent(this, GameActivity::class.java)
+        intent.putExtra(EXTRA_MESSAGE, MainActivity.instance.getGameId())
+        intent.putExtra("myid", this.currentGame.gameId)
+        startActivity(intent)*/
+    }
 
     override fun onDialogJoinGame(player:String, gameId: String) {
         try {
@@ -141,25 +100,22 @@ class MainActivity : AppCompatActivity() , GameDialogListener, JoinGameDialogLis
                 if(state != null) {
                     //currentGame = Game(state.players, state.gameId, state.state)
                     currentGame.setGameId(gameId)
+                    currentGame.createGameId = gameId
                     currentGame.setPlayers(state.players)
                     currentGame.setState(state.state)
-                    print("got something")
-                    //currentGame = Game(state.players, state.gameId, state.state)
-                    //gameArray[0] = state.gameId
-                    // val thisGamesId = state?.gameId
                 } else {
-                    //gameArray.set(0, "Fysj")
                     print("got nothing")
                 }
             }
         }catch(e: Exception) {
             Log.e("MainActivity", e.toString())
         }
-        print("Dette skjer når?") // Etter GameService.create(), men før this currentGame.setPlayers(state.players)
-    } // ends fun onDialogCreateGame()
+    }
+    fun returnGameId(): String{
+        return currentGame.gameId
+    }
 
-    /*override fun onDialogJoinGame(player: String, gameId: String) {
-        Log.d(TAG, "$player $gameId")
-    }*/
-
+    companion object {
+        val instance = MainActivity()
+    }
 }

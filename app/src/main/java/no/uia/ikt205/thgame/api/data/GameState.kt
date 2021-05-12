@@ -7,6 +7,12 @@ typealias GameState = List<List<Int>>
 
 @Parcelize
 data class Game(var players:MutableList<String>, var gameId:String, var state:GameState ):Parcelable {
+    var createGameId: String = "defaultValue"
+
+    get() = field
+    set(value) {
+        field = value
+    }
 
     fun getGame():String{
         var game = Game(players, gameId, state)
@@ -43,5 +49,4 @@ data class Game(var players:MutableList<String>, var gameId:String, var state:Ga
     fun getPlayers(): MutableList<String> {
         return this.players
     }
-
 }

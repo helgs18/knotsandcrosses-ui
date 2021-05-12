@@ -72,13 +72,10 @@ object GameService {
             }
         }
 
-        var test = requestQueue.add(request)
+        requestQueue.add(request)
 
     }
 
-    // fun pollGame(gameId: String, callback: GameServiceCallback)
-    // fun updateGame(players: List<String>, gameId: String, gameState: GameState, callback: GameServiceCallback)
-    // fun createGame(playerId: String, state: GameState, callback: GameServiceCallback)
     fun joinGame(player2: String, gameId: String, callback: GameServiceCallback) {
         var retval = true
         // ToDo: finn ut hvorfor appen krasjer
@@ -89,19 +86,15 @@ object GameService {
         val requestData = JSONObject()
         requestData.put("player", player2)
         requestData.put("gameId", gameId)
-        //var requestString = requestData.toString().replace("\"","")
         url = url.replace("<gameId>", gameId)
 
         val request = object : JsonObjectRequest(Request.Method.POST, url, requestData,
                 {
-                    // Success game created.
                     val game = Gson().fromJson(it.toString(0), Game::class.java)
                     // typealias GameServiceCallback = (state:Game?, errorCode:Int? ) -> Unit
                     callback(game, null)
                 }, {
-            // Error creating new game.
             callback(null, it.networkResponse.statusCode)
-            //retval = false
         }) {
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
@@ -111,7 +104,6 @@ object GameService {
             }
         }
         requestQueue.add(request)
-        //return retval
     }
 
     fun updateGame(players: List<String>, gameId: String, gameState: GameState, callback: GameServiceCallback) {
@@ -168,22 +160,5 @@ object GameService {
         Log.i("GameService", "Polled info")
 
     }
-
-
-    /*val request = object : JsonObjectRequest(Request.Method.POST, url, requestData,
-                {
-                    val game = Gson().fromJson(it.toString(0), Game::class.java)
-                    // typealias GameServiceCallback = (state:Game?, errorCode:Int? ) -> Unit
-                    callback(game, null)
-                }, {
-                    callback(null, it.networkResponse.statusCode)
-                }) {
-                    override fun getHeaders(): MutableMap<String, String>{
-                        val headers = HashMap<String, String>()
-                        headers["Content-type"] = "application/json"
-                        headers["Game-Service-Key"] = "SjmCbqP65f"
-                        return headers
-                }
-            }*/
 
 }
