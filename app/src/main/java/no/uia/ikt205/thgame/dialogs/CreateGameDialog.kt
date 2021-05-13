@@ -43,11 +43,7 @@ class CreateGameDialog() : DialogFragment() {
                         intent.putExtra(EXTRA_MESSAGE, MainActivity.instance.getGameId())
                         getContext().startActivity(intent)*/
 
-                        var intent = Intent(getContext(), GameActivity::class.java).apply {
-                            putExtra(no.uia.ikt205.knotsandcrosses.EXTRA_MESSAGE, createGameId)
-                        }
 
-                        startActivity(intent)
 
                     }
                 }

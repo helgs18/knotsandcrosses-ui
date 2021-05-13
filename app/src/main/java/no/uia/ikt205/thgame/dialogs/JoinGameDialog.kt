@@ -30,7 +30,7 @@ class JoinGameDialog  : DialogFragment() {
                         listenerGame.onDialogJoinGame(binding.username.text.toString(), binding.gameId.text.toString())
                         var playername = binding.username.text.toString()
 
-                        var message = binding.gameId.text.toString()
+                        var joinGameId = binding.gameId.text.toString()
                         var intent = Intent(getContext(), GameActivity::class.java).apply {
                             putExtra(EXTRA_MESSAGE, joinGameId)
                         }

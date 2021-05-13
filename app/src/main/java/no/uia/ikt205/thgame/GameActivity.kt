@@ -16,13 +16,15 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        var gameId = intent.getStringExtra(EXTRA_MESSAGE)
         var message: String = intent.getStringExtra(EXTRA_MESSAGE).toString()
         //Todo: Gjør noe tilsvarende for id?: val receivedGame = intent.getParcelableExtra<Game>(EXTRA_MESSAGE)
         pollGame(message)
 
         val wholestate = currentGame
 
-        binding.knapp00.text = currentGame.getState().toString()
+        binding.knapp00.text = gameId
         binding.knapp01.text = "0"
         binding.knapp02.text = "0"
         binding.knapp10.text = "O"

@@ -76,14 +76,21 @@ class MainActivity : AppCompatActivity() , GameDialogListener, JoinGameDialogLis
                 if(state != null) {
                     print("got something")
                     //currentGame = Game(state.players, state.gameId, state.state)
-                    currentGame.setGameId(state.gameId)
+                    currentGame.gameId = state.gameId.toString()
                     CreateGameDialog.instance.setCreateGameId(state.gameId)
                     currentGame.setPlayers(state.players)
                     currentGame.setState(state.state)
+                    // Todo: Sjekk om dette er godt nok. Muligens det er bedre å bruke en loop.
+                    var intent = Intent(this, GameActivity::class.java).apply {
+                        putExtra(no.uia.ikt205.knotsandcrosses.EXTRA_MESSAGE, currentGame.gameId)
+                    }
+
+                    startActivity(intent)
                 } else {
                     print("got nothing")
                 }
             }
+
         }catch(e: Exception) {
             Log.e("MainActivity", e.toString())
         }
